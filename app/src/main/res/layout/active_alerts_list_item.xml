@@ -21,6 +21,14 @@
         android:paddingLeft="15dp"
         android:layout_below="@+id/active_alerts_header"/>
 
+    <Button
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:text="@string/delete"
+        android:layout_alignParentRight="true" />
+
     <!--<ImageButton-->
         <!--android:layout_width="45dp"-->
         <!--android:layout_height="45dp"-->

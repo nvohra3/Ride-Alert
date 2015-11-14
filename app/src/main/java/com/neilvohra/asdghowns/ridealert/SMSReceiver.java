@@ -26,7 +26,6 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
         {
             SmsMessage SMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String sender = getNonFormattedNumber(SMessage.getOriginatingAddress());
-            System.out.println(sender);
             String body = SMessage.getMessageBody();
             // if there's an SMS from this number then send
             for (int j = 0; j < RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.size(); j++)

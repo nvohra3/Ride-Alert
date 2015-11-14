@@ -43,6 +43,15 @@
                 android:layout_gravity="center_vertical"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/select_contact"
+                android:id="@+id/derp"
+                android:onClick="derp"
+                android:layout_gravity="center_vertical"
+                android:layout_above="@id/select_contact"/>
         </RelativeLayout>
     </FrameLayout>
 

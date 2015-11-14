@@ -7,7 +7,6 @@ import android.widget.ListView;
 
 import com.neilvohra.asdghowns.ridealert.ActiveAlertsAdapter;
 import com.neilvohra.asdghowns.ridealert.R;
-import com.neilvohra.asdghowns.ridealert.RideAlertApplication;
 
 public class ActiveAlertsActivity extends DrawerBaseActivity {
     private ListView activeAlerts;
@@ -20,8 +19,8 @@ public class ActiveAlertsActivity extends DrawerBaseActivity {
         addDrawerItems();
         setupDrawer();
 
-        activeAlerts = (ListView) findViewById(R.id.active_alerts_list);
-        ActiveAlertsAdapter adapter = new ActiveAlertsAdapter(this, RideAlertApplication.activeServices);
+        activeAlerts = (ListView) findViewById(R.id.active_alerts_list_old);
+        ActiveAlertsAdapter adapter = new ActiveAlertsAdapter(this);
         activeAlerts.setAdapter(adapter);
     }
 

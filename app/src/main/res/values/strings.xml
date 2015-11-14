@@ -7,17 +7,18 @@
     <string name="select_contact">Select Contact</string>
     <string name="welcome_to_ride_alert">Welcome to Ride Alert</string>
     <string name="welcome_to">Welcome to</string>
-    <string name="ride_alert">Ride Alert!</string>
+    <string name="ride_alert">Ride Alert</string>
     <string name="set_up_alert">Set Up Alert</string>
     <string name="app_description">The purpose of this app is to notify a friend that you\'re almost
         at their location when you\'re giving them a ride. This is used to prevent that situation
         where you\'re sitting outside their house for 10 minutes waiting for them to come outside.
-        \nHow it works: Select a contact by clicking the button below. If you have an address in your
-        contacts book for the selected contact, then an "alert" will be set up and the contact will
-        get a text message when you\'re \"x\" miles from their address.  If you don\'t have an address
-        for that contact, then you have the option have a text message sent to the contact asking for
-        his/her address. When the contact responds with an address, the alert will automatically be
-        set up and he/she will receive a text message as expected when you\'re \"x\" miles away.</string>
+        \nHow it works: Select a contact by clicking the button below. If you have an address in
+        your contacts book for the selected contact, then an "alert" will be set up and the contact
+        will get a text message when you\'re \"x\" miles from their address.  If you don\'t have an
+        address for that contact, then you have the option have a text message sent to the contact
+        asking for his/her address. When the contact responds with an address, the alert will
+        automatically be set up and he/she will receive a text message as expected when you\'re
+        \"x\" miles away.</string>
     <string name="filler">Describe the application here. Put an email address for contacting?</string>
     <string name="title_activity_alert_info">AlertInfoActivity</string>
     <string name="drawer_open">Open navigation drawer</string>
@@ -27,14 +28,28 @@
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="title_actiity_home_screen">HomeScreenActivity</string>
     <string name="to_come">Stuff to come..</string>
+    <string name="delete">Delete</string>
+    <string name="alert_setup_successful">Alert has been successfully set up. Go to View Alerts to
+        see your active alerts.</string>
+    <string name="text_contact">Could not find an address for the selected contact. Would you like
+        to text the selected contact and ask for their address?</string>
+    <string name="no_number_exists">No phone number for selected contact</string>
 
     <string name="edit_notification_mile_radius">Edit Alert Mile Radius</string>
     <string name="About">About</string>
+    <string name="action_about">About</string>
+
+    <string name="title_home">HOME</string>
+    <string name="title_active_alerts">ACTIVE ALERTS</string>
 
     <string-array name="settings_menu_options">
         <item>@string/edit_notification_mile_radius</item>
         <item>@string/About</item>
     </string-array>
 
-    <string name="home">Home</string>
+    <string name="title_activity_home_screen_tab">HomeScreenTabActivity</string>
+    <string name="come_outside">Hey, I\'ll be there in 5 minutes. Come outside.</string>
+    <string name="request_address">Hey, can I get your address? I\'ll send you a text when I\'m a
+        few minutes away from your house to give you a heads up. Format it in the following form: "
+        + "Street, City"</string>
 </resources>

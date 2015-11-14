@@ -39,10 +39,6 @@ public class GeocoderTask extends AsyncTask<Void, Void, Boolean> {
         return true;
     }
 
-    /**
-     * On success, execute task to locate nearby stores
-     * @param success if task successfully executed
-     */
     @Override
     protected void onPostExecute(final Boolean success) {
         callback.onTaskCompletion(success, addresses);

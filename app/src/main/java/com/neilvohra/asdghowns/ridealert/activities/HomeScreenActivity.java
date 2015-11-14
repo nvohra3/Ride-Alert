@@ -219,7 +219,6 @@ public class HomeScreenActivity extends DrawerBaseActivity implements GeocoderTa
         {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

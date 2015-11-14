@@ -10,7 +10,8 @@ import java.util.ArrayList;
  */
 public class RideAlertApplication extends Application {
     public static ArrayList<AlertContactObject> phoneNumbersWaitingOnAddressesFrom = new ArrayList<>();
-    public static ArrayList<LocationTrackerService> activeServices = new ArrayList<>();
+    public static ArrayList<AlertContactObject> activeServices = new ArrayList<>();
+    public static LocationTrackerService service;
     public static int currentDrawerListOption;
 
     private static Application instance;

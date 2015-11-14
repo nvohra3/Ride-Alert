@@ -5,7 +5,6 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -106,21 +105,21 @@ public class AlertInfoActivity extends Activity implements ConnectionCallbacks,
 
 
 
-        TextView view = (TextView) findViewById(R.id.hello_world_1);
-        TextView view2 = (TextView) findViewById(R.id.hello_world_2);
-        TextView view3 = (TextView) findViewById(R.id.hello_world_3);
-        TextView view4 = (TextView) findViewById(R.id.hello_world_4);
-        TextView view5 = (TextView) findViewById(R.id.hello_world_5);
-        TextView view6 = (TextView) findViewById(R.id.hello_world_6);
-        float[] results = new float[1];
-        Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                33.769561, -84.390951, results);
-        view.setText("Miles from destination: " + results[0] * METERS_PER_MILE);
-        view2.setText(location.getLongitude() + "");
-        view3.setText(location.getLatitude() + "");
-        view4.setText(contactNumber);
-        view6.setText(33.769561 + "");
-        view5.setText(-84.390951 + "");
+//        TextView view = (TextView) findViewById(R.id.hello_world_1);
+//        TextView view2 = (TextView) findViewById(R.id.hello_world_2);
+//        TextView view3 = (TextView) findViewById(R.id.hello_world_3);
+//        TextView view4 = (TextView) findViewById(R.id.hello_world_4);
+//        TextView view5 = (TextView) findViewById(R.id.hello_world_5);
+//        TextView view6 = (TextView) findViewById(R.id.hello_world_6);
+//        float[] results = new float[1];
+//        Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+//                33.769561, -84.390951, results);
+//        view.setText("Miles from destination: " + results[0] * METERS_PER_MILE);
+//        view2.setText(location.getLongitude() + "");
+//        view3.setText(location.getLatitude() + "");
+//        view4.setText(contactNumber);
+//        view6.setText(33.769561 + "");
+//        view5.setText(-84.390951 + "");
 
     }
 

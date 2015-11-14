@@ -2,12 +2,10 @@ package com.neilvohra.asdghowns.ridealert;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Log;
 
@@ -27,18 +25,9 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
 
     private LocationRequest locationRequest;
 
-    private AlertContactObject alertFriendObj;
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         initialize();
-        Bundle bundle = intent.getExtras();
-        if (bundle != null)
-        {
-            alertFriendObj = (AlertContactObject) bundle.get("AlertFriendObj");
-        }
-        RideAlertApplication.activeServices.add(this);
-        System.out.println("Size: " + RideAlertApplication.activeServices.size());
         return Service.START_NOT_STICKY;
     }
 
@@ -52,16 +41,17 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
     public void onDestroy() {
         super.onDestroy();
         stopLocationUpdates();
-        RideAlertApplication.activeServices.remove(this);
-        System.out.println("Service Destroyed");
     }
 
     protected void initialize() {
-        client = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        if (client == null)
+        {
+            client = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         createLocationRequest();
         client.connect();
@@ -98,18 +88,20 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
         if (location == null)
             return;
 
-        Address contactAddress = alertFriendObj.getContactAddress();
-        float[] results = new float[1];
-        Location.distanceBetween(location.getLatitude(), location.getLongitude(),
-                contactAddress.getLatitude(), contactAddress.getLongitude(), results);
-        if (results[0] * METERS_PER_MILE < 1)
+        for (int i = 0; i < RideAlertApplication.activeServices.size(); i++)
         {
-            SharedPreferences appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
-            String message = appSharedPrefs.getString("rideAlertMessage", null);
-            SmsManager.getDefault().sendTextMessage(alertFriendObj.getContactNumber(), null, message, null, null);
-            // Remove AlertFriendObject once the contact has been sent a text
-            onDestroy();
-            Log.d("LocationTrackerService", "Text message sent to " + alertFriendObj.getContactNumber());
+            Address contactAddress = RideAlertApplication.activeServices.get(i).getContactAddress();
+            float[] results = new float[1];
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(),
+                    contactAddress.getLatitude(), contactAddress.getLongitude(), results);
+            if (results[0] * METERS_PER_MILE < 1)
+            {
+                String message = getString(R.string.come_outside);
+                SmsManager.getDefault().sendTextMessage(RideAlertApplication.activeServices.get(i).getContactNumber(), null, message, null, null);
+                // Remove AlertFriendObject once the contact has been sent a text
+                RideAlertApplication.activeServices.remove(i);
+                Log.d(TAG, "Text message sent to " + RideAlertApplication.activeServices.get(i).getContactNumber());
+            }
         }
     }
 
@@ -120,9 +112,5 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
 
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
-    }
-
-    public AlertContactObject getAlertObject() {
-        return alertFriendObj;
     }
 }

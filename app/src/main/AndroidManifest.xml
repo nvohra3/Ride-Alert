@@ -20,8 +20,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activities.HomeScreenActivity"
-            android:label="@string/home" >
+            android:name=".activities.HomeScreenTabActivity"
+            android:label="@string/ride_alert" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,7 +50,6 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>

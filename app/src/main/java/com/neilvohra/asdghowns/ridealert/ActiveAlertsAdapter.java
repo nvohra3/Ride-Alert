@@ -7,26 +7,22 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.List;
-
 
 public class ActiveAlertsAdapter extends BaseAdapter {
     private Context context;
-    private List<LocationTrackerService> activeServices;
 
-    public ActiveAlertsAdapter(Context context, List<LocationTrackerService> activeServices) {
+    public ActiveAlertsAdapter(Context context) {
         this.context = context;
-        this.activeServices = activeServices;
     }
 
     @Override
     public int getCount() {
-        return activeServices.size();
+        return RideAlertApplication.activeServices.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return activeServices.get(position);
+        return RideAlertApplication.activeServices.get(position);
     }
 
     @Override
@@ -36,8 +32,7 @@ public class ActiveAlertsAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final LocationTrackerService service = activeServices.get(position);
-        final AlertContactObject alertObject = service.getAlertObject();
+        final AlertContactObject alertObject = RideAlertApplication.activeServices.get(position);
         final DrawerViewHolder holder;
 
         if (convertView == null) {
