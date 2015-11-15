@@ -1,0 +1,6 @@
+- Separate code for views and logic; a lot is packed into HomeScreenTabActivity right now
+- Add settings page
+- Some methods are depracated
+- Is there a more efficient way to check through the activeServices list to see if I'm near a location yet?
+- Add a feature so I can use this on Tech campus. Make it so I can select a building and a contact, and he/she knows when I'm nearby so they can come let me into their dorm. 
+- How often does the app really need location updates?

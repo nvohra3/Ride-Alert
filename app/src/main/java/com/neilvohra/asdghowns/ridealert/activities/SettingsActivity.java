@@ -1,18 +1,19 @@
 package com.neilvohra.asdghowns.ridealert.activities;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.neilvohra.asdghowns.ridealert.R;
+import com.neilvohra.asdghowns.ridealert.SettingsListAdapter;
 
 
-public class SettingsActivity extends DrawerBaseActivity {
+public class SettingsActivity extends Activity {
     private ListView settingsList;
-    private String[][] settingsMenuOption = {
-            new String[] {"General", "Contains basic settings for application" },
-            new String[] {"About", "About application" }
+    private String[] settingsMenuOption = {
+            "General",
+            "About",
             };
 
     @Override
@@ -20,28 +21,15 @@ public class SettingsActivity extends DrawerBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-//        settingsList = findViewById(R.id.)
-//        SettingsListAdapter adapter = new SettingsListAdapter(this, settingsMenuOption);
-//        settingsList.setAdapter(adapter);
-        addDrawerItems();
-        setupDrawer();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_settings, menu);
-        return true;
+        settingsList = (ListView) findViewById(R.id.settings_list);
+        SettingsListAdapter adapter = new SettingsListAdapter(this, settingsMenuOption);
+        settingsList.setAdapter(adapter);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
             return true;

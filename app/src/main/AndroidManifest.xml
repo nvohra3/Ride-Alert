@@ -29,14 +29,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.AlertInfoActivity"
-            android:label="@string/title_activity_alert_info" >
-        </activity>
-        <activity
-            android:name=".activities.ActiveAlertsActivity"
-            android:label="@string/title_activity_active_alerts" >
-        </activity>
-        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" >
         </activity>

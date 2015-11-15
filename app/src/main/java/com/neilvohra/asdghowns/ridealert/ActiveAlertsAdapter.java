@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
-
 
 public class ActiveAlertsAdapter extends BaseAdapter {
     private Context context;
@@ -17,12 +17,12 @@ public class ActiveAlertsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return RideAlertApplication.activeServices.size();
+        return RideAlertApplication.activeAlerts.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return RideAlertApplication.activeServices.get(position);
+        return RideAlertApplication.activeAlerts.get(position);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ActiveAlertsAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final AlertContactObject alertObject = RideAlertApplication.activeServices.get(position);
+        final AlertContactObject alertObject = RideAlertApplication.activeAlerts.get(position);
         final DrawerViewHolder holder;
 
         if (convertView == null) {
@@ -46,6 +46,19 @@ public class ActiveAlertsAdapter extends BaseAdapter {
         } else {
             holder = (DrawerViewHolder) convertView.getTag();
         }
+
+        Button delete = (Button) convertView.findViewById(R.id.delete_button);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RideAlertApplication.activeAlerts.remove(position);
+                notifyDataSetChanged();
+                if (RideAlertApplication.activeAlerts.size() == 0)
+                {
+                    RideAlertApplication.service.onDestroy();
+                }
+            }
+        });
 
         convertView.setTag(holder);
         holder.header.setText(alertObject.getContactName());

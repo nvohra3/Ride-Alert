@@ -17,12 +17,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.neilvohra.asdghowns.ridealert.ActiveAlertsAdapter;
@@ -33,6 +35,7 @@ import com.neilvohra.asdghowns.ridealert.LocationTrackerService;
 import com.neilvohra.asdghowns.ridealert.R;
 import com.neilvohra.asdghowns.ridealert.RideAlertApplication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreenTabActivity extends ActionBarActivity implements ActionBar.TabListener,
@@ -78,17 +81,18 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_home_screen_tab, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         switch (id)
         {
             case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_about:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -145,10 +149,12 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String message = getString(R.string.request_address);
-                        SmsManager.getDefault().sendTextMessage(contactNumber, null, message, null, null);
-                        AlertContactObject obj = new AlertContactObject(contactName, contactNumber, null);
+                        String message1 = getString(R.string.request_address_1);
+                        String message2 = getString(R.string.request_address_2);
+                        SmsManager.getDefault().sendTextMessage(contactNumber, null, message1, null, null);
+                        SmsManager.getDefault().sendTextMessage(contactNumber, null, message2, null, null);
                         Toast.makeText(getApplicationContext(), "Text sent.", Toast.LENGTH_LONG);
+                        AlertContactObject obj = new AlertContactObject(contactName, contactNumber, null);
                         RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.add(obj);
                         Log.d(TAG, "Sent text message to " + obj.getContactName());
                     }
@@ -231,7 +237,7 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
         {
             // Handle appropriately
         }
-        RideAlertApplication.activeServices.add(new AlertContactObject(
+        RideAlertApplication.activeAlerts.add(new AlertContactObject(
                 contactName, contactNumber, addresses.get(0)));
         LocationTrackerService service = RideAlertApplication.service;
         if (service == null)
@@ -345,11 +351,22 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_active_alerts, container, false);
-            ListView activeAlerts = (ListView) rootView.findViewById(R.id.active_alerts_list);
-            ActiveAlertsAdapter adapter = new ActiveAlertsAdapter(getActivity());
-            activeAlerts.setAdapter(adapter);
-            return rootView;
+            ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
+            if (activeAlerts.size() > 0)
+            {
+                View rootView = inflater.inflate(R.layout.fragment_active_alerts, container, false);
+                ListView activeAlertsList = (ListView) rootView.findViewById(R.id.active_alerts_list);
+                ActiveAlertsAdapter adapter = new ActiveAlertsAdapter(getActivity());
+                activeAlertsList.setAdapter(adapter);
+                return rootView;
+            } else
+            {
+                TextView textView = new TextView(getActivity());
+                textView.setText("No active alerts.. \nFor now.");
+                textView.setTextSize(30);
+                textView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                return textView;
+            }
         }
     }
 }

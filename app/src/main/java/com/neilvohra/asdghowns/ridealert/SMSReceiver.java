@@ -7,15 +7,19 @@ import android.location.Address;
 import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallback {
     private AlertContactObject obj;
+    private Context context;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // get SMS data, if bundle is null then there is no data so return
+        this.context = context;
         Bundle extras = intent.getExtras();
         if (extras == null)
             return;
@@ -26,7 +30,7 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
         {
             SmsMessage SMessage = SmsMessage.createFromPdu((byte[]) pdus[i]);
             String sender = getNonFormattedNumber(SMessage.getOriginatingAddress());
-            String body = SMessage.getMessageBody();
+            String address = SMessage.getMessageBody();
             // if there's an SMS from this number then send
             for (int j = 0; j < RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.size(); j++)
             {
@@ -34,8 +38,10 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
                 String contactNumber = obj.getContactNumber();
                 if (PhoneNumberUtils.compare(sender, contactNumber))
                 {
-                    GeocoderTask task = new GeocoderTask(RideAlertApplication.getContext(), this, body);
+                    RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(obj);
+                    GeocoderTask task = new GeocoderTask(context, this, address);
                     task.execute();
+                    return;
                 }
             }
         }
@@ -45,11 +51,19 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
         if (!success)
             return;
 
-        Intent intent = new Intent(RideAlertApplication.getContext(), LocationTrackerService.class);
-        intent.putExtra("AlertFriendObj", new AlertContactObject(obj.getContactName(), obj.getContactNumber(), addresses.get(0)));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        RideAlertApplication.getContext().startService(intent);
-        RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(obj.getContactNumber());
+        String contactName = obj.getContactName();
+        String contactNumber = obj.getContactNumber();
+
+        ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
+        activeAlerts.add(new AlertContactObject(contactName, contactNumber, addresses.get(0)));
+        LocationTrackerService service = RideAlertApplication.service;
+        if (service == null)
+        {
+            Intent intent = new Intent(context, LocationTrackerService.class);
+            context.startService(intent);
+        }
+        Toast.makeText(context, context.getString(R.string.alert_setup_successful),
+                Toast.LENGTH_LONG).show();
     }
 
     private String getNonFormattedNumber(String formattedNumber) {

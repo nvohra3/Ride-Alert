@@ -10,22 +10,23 @@
         android:layout_height="wrap_content"
         android:id="@+id/active_alerts_header"
         android:text="@string/hello_world"
-        android:textSize="28sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/active_alerts_description"
         android:text="@string/hello_world"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:paddingLeft="15dp"
         android:layout_below="@+id/active_alerts_header"/>
 
     <Button
-        android:layout_width="45dp"
+        android:layout_width="wrap_content"
         android:layout_height="45dp"
+        android:id="@+id/delete_button"
         android:layout_marginTop="5dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="8dp"
         android:text="@string/delete"
         android:layout_alignParentRight="true" />
 

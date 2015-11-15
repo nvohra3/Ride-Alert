@@ -15,6 +15,8 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.ArrayList;
+
 public class LocationTrackerService extends Service implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -88,19 +90,25 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
         if (location == null)
             return;
 
-        for (int i = 0; i < RideAlertApplication.activeServices.size(); i++)
+        ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
+        for (int i = 0; i < activeAlerts.size(); i++)
         {
-            Address contactAddress = RideAlertApplication.activeServices.get(i).getContactAddress();
+            Address contactAddress = activeAlerts.get(i).getContactAddress();
             float[] results = new float[1];
             Location.distanceBetween(location.getLatitude(), location.getLongitude(),
                     contactAddress.getLatitude(), contactAddress.getLongitude(), results);
             if (results[0] * METERS_PER_MILE < 1)
             {
                 String message = getString(R.string.come_outside);
-                SmsManager.getDefault().sendTextMessage(RideAlertApplication.activeServices.get(i).getContactNumber(), null, message, null, null);
-                // Remove AlertFriendObject once the contact has been sent a text
-                RideAlertApplication.activeServices.remove(i);
-                Log.d(TAG, "Text message sent to " + RideAlertApplication.activeServices.get(i).getContactNumber());
+                SmsManager.getDefault().sendTextMessage(
+                        activeAlerts.get(i).getContactNumber(), null, message, null, null);
+                Log.d(TAG, "Text message sent to " + activeAlerts.get(i).getContactNumber());
+                // Remove service from list of current services once the contact has been sent a text
+                activeAlerts.remove(i);
+                if (activeAlerts.size() == 0)
+                {
+                    onDestroy();
+                }
             }
         }
     }
