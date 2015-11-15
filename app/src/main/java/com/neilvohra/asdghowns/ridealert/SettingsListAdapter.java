@@ -9,9 +9,9 @@ import android.widget.TextView;
 
 public class SettingsListAdapter extends BaseAdapter {
     private Context context;
-    private String[][] menuOptions;
+    private String[] menuOptions;
 
-    public SettingsListAdapter(Context context, String[][] menuOptions) {
+    public SettingsListAdapter(Context context, String[] menuOptions) {
         this.context = context;
         this.menuOptions = menuOptions;
     }
@@ -33,7 +33,6 @@ public class SettingsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final String[] menuOption = menuOptions[position];
         final SettingsMenuHolder holder;
 
         if (convertView == null)
@@ -43,14 +42,14 @@ public class SettingsListAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.settings_list_item, null);
 
             holder = new SettingsMenuHolder(context);
-            holder.header = (TextView) convertView.findViewById(R.id.active_alerts_header);
+            holder.header = (TextView) convertView.findViewById(R.id.settings_row_title);
         } else
         {
             holder = (SettingsMenuHolder) convertView.getTag();
         }
 
         convertView.setTag(holder);
-        holder.header.setText(menuOption[0]);
+        holder.header.setText(menuOptions[position]);
         return convertView;
     }
 
