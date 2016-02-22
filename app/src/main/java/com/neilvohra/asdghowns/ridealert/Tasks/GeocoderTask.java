@@ -1,4 +1,4 @@
-package com.neilvohra.asdghowns.ridealert;
+package com.neilvohra.asdghowns.ridealert.Tasks;
 
 import android.content.Context;
 import android.location.Address;
@@ -24,7 +24,6 @@ public class GeocoderTask extends AsyncTask<Void, Void, Boolean> {
         this.context = context;
         this.callback = callback;
         this.contactAddress = contactAddress;
-
     }
 
     @Override

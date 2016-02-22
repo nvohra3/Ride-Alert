@@ -29,8 +29,8 @@ import android.widget.Toast;
 
 import com.neilvohra.asdghowns.ridealert.ActiveAlertsAdapter;
 import com.neilvohra.asdghowns.ridealert.AlertContactObject;
-import com.neilvohra.asdghowns.ridealert.GeocoderTask;
-import com.neilvohra.asdghowns.ridealert.GeocoderTaskCallback;
+import com.neilvohra.asdghowns.ridealert.Tasks.GeocoderTask;
+import com.neilvohra.asdghowns.ridealert.Tasks.GeocoderTaskCallback;
 import com.neilvohra.asdghowns.ridealert.LocationTrackerService;
 import com.neilvohra.asdghowns.ridealert.R;
 import com.neilvohra.asdghowns.ridealert.RideAlertApplication;
@@ -55,7 +55,6 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
 
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
@@ -236,6 +235,7 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
         if (!success)
         {
             // Handle appropriately
+            return;
         }
         RideAlertApplication.activeAlerts.add(new AlertContactObject(
                 contactName, contactNumber, addresses.get(0)));

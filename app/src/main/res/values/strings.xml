@@ -8,10 +8,10 @@
     <string name="select_contact">Select Contact</string>
     <string name="welcome_to_ride_alert">Welcome to Ride Alert!</string>
     <string name="set_up_alert">Set Up Alert</string>
-    <string name="app_description">The purpose of this app is to notify a friend that you\'re almost
+    <string name="app_description">The purpose of this app is to notify a somebody that you\'re almost
         at their location when you\'re giving them a ride. This is used to prevent that situation
         where you\'re sitting outside their house for 10 minutes waiting for them to come outside.
-        \nHow it works: Select a contact by clicking the button below. If you have an address in
+        \n\nHow it works: Select a contact by clicking the button below. If you have an address in
         your contacts book for the selected contact, then an "alert" will be set up and the contact
         will get a text message when you\'re \"x\" miles from their address.  If you don\'t have an
         address for that contact, then you have the option have a text message sent to the contact

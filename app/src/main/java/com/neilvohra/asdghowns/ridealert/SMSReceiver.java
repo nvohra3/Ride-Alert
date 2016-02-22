@@ -9,6 +9,9 @@ import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
+import com.neilvohra.asdghowns.ridealert.Tasks.GeocoderTask;
+import com.neilvohra.asdghowns.ridealert.Tasks.GeocoderTaskCallback;
+
 import java.util.ArrayList;
 import java.util.List;
 
