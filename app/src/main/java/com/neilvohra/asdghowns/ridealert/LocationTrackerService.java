@@ -127,21 +127,29 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
         LocationServices.FusedLocationApi.removeLocationUpdates(client, this);
     }
 
-    public void onTaskCompletion(final boolean success, int remainingTravelTime, int activeAlertsIndex) {
-        // If the user is 5 minutes away from the contact, send the alert
-        if (remainingTravelTime <= 5)
+    public void onTaskCompletion(final boolean success, double remainingTravelTimeMinutes, int activeAlertsIndex) {
+        ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
+        // When the user is about 1 minute away from the contact, send the final alert
+        if (remainingTravelTimeMinutes <= 1)
         {
-            ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
-            String message = getString(R.string.come_outside);
+            String message = getString(R.string.come_outside_now);
             SmsManager.getDefault().sendTextMessage(
                     activeAlerts.get(activeAlertsIndex).getContactNumber(), null, message, null, null);
             Log.d(TAG, "Text message sent to " + activeAlerts.get(activeAlertsIndex).getContactNumber());
-            // Remove service from list of current services once the contact has been sent a text
+            // Remove service from current services list once the final alert has been sent
             activeAlerts.remove(activeAlertsIndex);
             if (activeAlerts.size() == 0)
             {
                 onDestroy();
             }
+        }
+
+        else if (remainingTravelTimeMinutes <= 5)
+        {
+            String message = getString(R.string.come_outside_five_minutes);
+            SmsManager.getDefault().sendTextMessage(
+                    activeAlerts.get(activeAlertsIndex).getContactNumber(), null, message, null, null);
+            Log.d(TAG, "Text message sent to " + activeAlerts.get(activeAlertsIndex).getContactNumber());
         }
     }
 }

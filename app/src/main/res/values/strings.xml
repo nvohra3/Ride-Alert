@@ -50,7 +50,8 @@
     </string-array>
 
     <string name="title_activity_home_screen_tab">HomeScreenTabActivity</string>
-    <string name="come_outside">Hey, I\'ll be there in 5 minutes. Come outside.</string>
+    <string name="come_outside_five_minutes">Hey, I\'ll be there in 5 minutes.</string>
+    <string name="come_outside_now">Come outside.</string>
     <string name="request_address_1">Hey, can I get your address? I\'ll send you a text when I\'m a
         few minutes away from your house to give you a heads up.</string>
     <string name="request_address_2">Format it in the following form: Street, City"</string>

@@ -17,7 +17,7 @@ import java.net.URL;
 public class RemainingTravelTimeTask extends AsyncTask<Void, Void, Boolean> {
     private LocationTrackerService callback;
     private Address userAddress, contactAddress;
-    private int remainingTravelTime;
+    private double remainingTravelTimeMinutes;
     private int activeAlertsIndex;
 
     /**
@@ -25,27 +25,13 @@ public class RemainingTravelTimeTask extends AsyncTask<Void, Void, Boolean> {
      * @param contactAddress
      * @param userAddress
      */
-    public RemainingTravelTimeTask(LocationTrackerService callback,
-                                   Address userAddress, Address contactAddress, int activeAlertsIndex) {
+    public RemainingTravelTimeTask(LocationTrackerService callback, Address userAddress,
+                                   Address contactAddress, int activeAlertsIndex) {
         this.callback = callback;
         this.userAddress = userAddress;
         this.contactAddress = contactAddress;
         this.activeAlertsIndex = activeAlertsIndex;
 
-    }
-
-    private String readStream(InputStream is) {
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            int i = is.read();
-            while(i != -1) {
-                bo.write(i);
-                i = is.read();
-            }
-            return bo.toString();
-        } catch (IOException e) {
-            return "";
-        }
     }
 
     @Override
@@ -81,9 +67,9 @@ public class RemainingTravelTimeTask extends AsyncTask<Void, Void, Boolean> {
 
             JSONObject json = new JSONObject(response);
             // travelTimeString represents the remaining travel time in seconds
-            int travelTimeSeconds = (Integer) json.getJSONArray("rows").getJSONObject(0).
+            double travelTimeSeconds = (double) json.getJSONArray("rows").getJSONObject(0).
                     getJSONArray("elements").getJSONObject(0).getJSONObject("duration").get("value");
-            remainingTravelTime = travelTimeSeconds / 60;
+            remainingTravelTimeMinutes = travelTimeSeconds / 60;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -94,6 +80,22 @@ public class RemainingTravelTimeTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(final Boolean success) {
-        callback.onTaskCompletion(success, remainingTravelTime, activeAlertsIndex);
+        callback.onTaskCompletion(success, remainingTravelTimeMinutes, activeAlertsIndex);
+    }
+
+    private String readStream(InputStream is) {
+        try {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            int i = is.read();
+            while(i != -1) {
+                bo.write(i);
+                i = is.read();
+            }
+            return bo.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
