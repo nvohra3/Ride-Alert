@@ -101,22 +101,22 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
         userAddress.setLongitude(userLongitude);
         ArrayList<AlertContactObject> activeAlerts = RideAlertApplication.activeAlerts;
         for (int i = 0; i < activeAlerts.size(); i++)
+    {
+        Address contactAddress = activeAlerts.get(i).getContactAddress();
+        float[] results = new float[1];
+        double contactLatitude = contactAddress.getLatitude();
+        double contactLongitude = contactAddress.getLongitude();
+        Location.distanceBetween(userLatitude, userLongitude,
+                contactLatitude, contactLongitude, results);
+        // When the driver is about 2 miles away, start seeing if driving distance < 5 minutes
+        if (results[0] * METERS_PER_MILE < 2)
         {
-            Address contactAddress = activeAlerts.get(i).getContactAddress();
-            float[] results = new float[1];
-            double contactLatitude = contactAddress.getLatitude();
-            double contactLongitude = contactAddress.getLongitude();
-            Location.distanceBetween(userLatitude, userLongitude,
-                    contactLatitude, contactLongitude, results);
-            // When the driver is about 2 miles away, start seeing if driving distance < 5 minutes
-            if (results[0] * METERS_PER_MILE < 2)
-            {
-                RemainingTravelTimeTask task = new RemainingTravelTimeTask(this,
-                        userAddress, contactAddress, i);
-                task.execute();
-            }
+            RemainingTravelTimeTask task = new RemainingTravelTimeTask(this,
+                    userAddress, contactAddress, i);
+            task.execute();
         }
     }
+}
 
     @Override
     public void onConnectionSuspended(int arg0) {
@@ -142,9 +142,7 @@ public class LocationTrackerService extends Service implements GoogleApiClient.C
             {
                 onDestroy();
             }
-        }
-
-        else if (remainingTravelTimeMinutes <= 5)
+        } else if (remainingTravelTimeMinutes <= 5)
         {
             String message = getString(R.string.come_outside_five_minutes);
             SmsManager.getDefault().sendTextMessage(

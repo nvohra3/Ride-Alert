@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
-import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsMessage;
 import android.widget.Toast;
 
@@ -21,7 +20,6 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // get SMS data, if bundle is null then there is no data so return
         this.context = context;
         Bundle extras = intent.getExtras();
         if (extras == null)
@@ -35,17 +33,13 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
             String sender = getNonFormattedNumber(SMessage.getOriginatingAddress());
             String address = SMessage.getMessageBody();
             // if there's an SMS from this number then send
-            for (int j = 0; j < RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.size(); j++)
+            obj = RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.get(sender);
+            if (obj != null) // True if waiting for an address from this sender
             {
-                obj = RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.get(i);
-                String contactNumber = obj.getContactNumber();
-                if (PhoneNumberUtils.compare(sender, contactNumber))
-                {
-                    RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(obj);
-                    GeocoderTask task = new GeocoderTask(context, this, address);
-                    task.execute();
-                    return;
-                }
+                RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(sender);
+                GeocoderTask task = new GeocoderTask(context, this, address);
+                task.execute();
+                return;
             }
         }
     }

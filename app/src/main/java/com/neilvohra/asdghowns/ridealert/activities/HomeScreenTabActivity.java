@@ -154,7 +154,7 @@ public class HomeScreenTabActivity extends ActionBarActivity implements ActionBa
                         SmsManager.getDefault().sendTextMessage(contactNumber, null, message2, null, null);
                         Toast.makeText(getApplicationContext(), "Text sent.", Toast.LENGTH_LONG);
                         AlertContactObject obj = new AlertContactObject(contactName, contactNumber, null);
-                        RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.add(obj);
+                        RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.put(contactNumber, obj);
                         Log.d(TAG, "Sent text message to " + obj.getContactName());
                     }
                 })
