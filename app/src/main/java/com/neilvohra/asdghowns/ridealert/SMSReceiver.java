@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.neilvohra.asdghowns.ridealert.Tasks.GeocoderTask;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallback {
+    private final String TAG = "SMSReceiver";
     private AlertContactObject obj;
     private Context context;
 
@@ -36,7 +39,6 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
             obj = RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.get(sender);
             if (obj != null) // True if waiting for an address from this sender
             {
-                RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(sender);
                 GeocoderTask task = new GeocoderTask(context, this, address);
                 task.execute();
                 return;
@@ -47,6 +49,16 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
     public void onTaskCompletion(final boolean success, List<Address> addresses){
         if (!success)
             return;
+
+        if (addresses.size() == 0)
+        {
+            invalidAddress();
+            return;
+        } else if (addresses.size() > 1)
+        {
+            multipleAddressResults();
+            return;
+        }
 
         String contactName = obj.getContactName();
         String contactNumber = obj.getContactNumber();
@@ -59,6 +71,8 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
             Intent intent = new Intent(context, LocationTrackerService.class);
             context.startService(intent);
         }
+
+        RideAlertApplication.phoneNumbersWaitingOnAddressesFrom.remove(contactNumber);
         Toast.makeText(context, context.getString(R.string.alert_setup_successful),
                 Toast.LENGTH_LONG).show();
     }
@@ -69,5 +83,18 @@ public class SMSReceiver extends BroadcastReceiver implements GeocoderTaskCallba
             if (Character.isDigit(formattedNumber.charAt(i)))
                 contactNumber += formattedNumber.charAt(i);
         return contactNumber;
+    }
+
+    private void invalidAddress() {
+        String message =  "ERROR: Could not recognize address. Perhaps there was a typo?";
+        SmsManager.getDefault().sendTextMessage(obj.getContactNumber(), null, message, null, null);
+        Log.d(TAG, "Invalid address text message sent to " + obj.getContactNumber());
+    }
+
+    private void multipleAddressResults() {
+        String message =  "Hmm, I got multiple results for that address.  " +
+                "Can you be a little more specific?";
+        SmsManager.getDefault().sendTextMessage(obj.getContactNumber(), null, message, null, null);
+        Log.d(TAG, "Multiple addresses text message sent to " + obj.getContactNumber());
     }
 }

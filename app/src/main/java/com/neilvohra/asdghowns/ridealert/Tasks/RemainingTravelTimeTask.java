@@ -67,6 +67,7 @@ public class RemainingTravelTimeTask extends AsyncTask<Void, Void, Boolean> {
 
             JSONObject json = new JSONObject(response);
             // travelTimeString represents the remaining travel time in seconds
+
             double travelTimeSeconds = (double) json.getJSONArray("rows").getJSONObject(0).
                     getJSONArray("elements").getJSONObject(0).getJSONObject("duration").get("value");
             remainingTravelTimeMinutes = travelTimeSeconds / 60;

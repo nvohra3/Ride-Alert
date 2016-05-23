@@ -40,6 +40,9 @@ public class GeocoderTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected void onPostExecute(final Boolean success) {
-        callback.onTaskCompletion(success, addresses);
+        if (success)
+        {
+            callback.onTaskCompletion(success, addresses);
+        } // else??
     }
 }
